@@ -22,7 +22,6 @@ jobs:
         with:
           channel: 'stable'
           cache: true
-          # Using latest stable ensures Dart SDK compatibility with your dependencies
 
       - name: Install dependencies
         run: flutter pub get
@@ -41,11 +40,24 @@ jobs:
 
       - name: Decode Keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '\n' | tr -d ' ' | base64 --decode > zelora-release-key.jks
-          if [ ! -s zelora-release-key.jks ]; then
-            echo "::error::Keystore decoding failed or resulted in an empty file!"
-            exit 1
-          fi
+          import base64
+          import os
+
+          encoded = os.environ.get('KEYSTORE_BASE64')
+          # Clean all possible whitespace/newlines from the user's copy-paste
+          clean_encoded = "".join(encoded.split())
+          
+          try:
+              decoded = base64.b64decode(clean_encoded)
+              with open("zelora-release-key.jks", "wb") as f:
+                  f.write(decoded)
+              print("Successfully decoded keystore using Python logic.")
+          except Exception as e:
+              print(f"::error::Python decoding failed: {str(e)}")
+              exit(1)
+        shell: python
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
 
       - name: Create key.properties
         run: |
