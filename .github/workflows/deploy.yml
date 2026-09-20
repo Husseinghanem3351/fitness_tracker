@@ -26,19 +26,27 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Decode Keystore (Robust)
+      - name: Verify GitHub Secrets
+        run: |
+          if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+            echo "::error::MISSING SECRET: KEYSTORE_BASE64 is empty!"
+            exit 1
+          fi
+          echo "Secrets are present."
+
+      - name: Decode Keystore (Smart Padding)
         run: |
           import base64
           import os
           import re
 
           encoded = os.environ.get('KEYSTORE_BASE64')
-          if not encoded:
-              print("::error::KEYSTORE_BASE64 is empty or not set!")
-              exit(1)
-          
-          # Remove any non-base64 characters
+          # Clean text
           clean_encoded = re.sub(r'[^a-zA-Z0-9+/=]', '', encoded)
+          
+          # Fix padding if missing (Base64 length must be multiple of 4)
+          padding_needed = (4 - len(clean_encoded) % 4) % 4
+          clean_encoded += "=" * padding_needed
           
           try:
               decoded = base64.b64decode(clean_encoded)
