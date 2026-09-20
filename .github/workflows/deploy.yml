@@ -26,14 +26,6 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Verify GitHub Secrets
-        run: |
-          if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "::error::MISSING SECRET: KEYSTORE_BASE64 is empty!"
-            exit 1
-          fi
-          echo "Secrets are present."
-
       - name: Decode Keystore (Smart Padding)
         run: |
           import base64
@@ -41,18 +33,19 @@ jobs:
           import re
 
           encoded = os.environ.get('KEYSTORE_BASE64')
-          # Clean text
+          # Remove any non-base64 characters
           clean_encoded = re.sub(r'[^a-zA-Z0-9+/=]', '', encoded)
           
-          # Fix padding if missing (Base64 length must be multiple of 4)
+          # Fix padding if missing
           padding_needed = (4 - len(clean_encoded) % 4) % 4
           clean_encoded += "=" * padding_needed
           
           try:
               decoded = base64.b64decode(clean_encoded)
-              with open("zelora-release-key.jks", "wb") as f:
+              # Place the JKS file inside the android folder where Gradle expects it
+              with open("android/zelora-release-key.jks", "wb") as f:
                   f.write(decoded)
-              print(f"Successfully decoded keystore. Size: {len(decoded)} bytes")
+              print("Successfully decoded keystore into android folder.")
           except Exception as e:
               print(f"::error::Keystore decoding failed: {str(e)}")
               exit(1)
@@ -65,7 +58,7 @@ jobs:
           echo "storePassword=${{ secrets.STORE_PASSWORD }}" > android/key.properties
           echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
           echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
-          echo "storeFile=../zelora-release-key.jks" >> android/key.properties
+          echo "storeFile=zelora-release-key.jks" >> android/key.properties
 
       - name: Build Android App Bundle (Signed)
         run: flutter build appbundle --release --no-pub
