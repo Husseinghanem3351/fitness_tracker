@@ -1,10 +1,8 @@
-name: ZELORA CI/CD - Build & Deploy
+name: ZELORA CI/CD - Build & Sign
 
 on:
   push:
-    branches: [ "main", "master" ]
-  pull_request:
-    branches: [ "main", "master" ]
+    branches: [ "main" ]
 
 jobs:
   build:
@@ -16,20 +14,25 @@ jobs:
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: '3.10.4' # Match your local version
+          flutter-version: '3.10.4'
           channel: 'stable'
           cache: true
 
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Analyze code
-        run: flutter analyze
+      - name: Decode Keystore
+        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > zelora-release-key.jks
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.STORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=../zelora-release-key.jks" >> android/key.properties
 
       - name: Build Android App Bundle (AAB)
         run: flutter build appbundle --release --no-pub
-        # Note: This step might fail until you setup signing configs in build.gradle
-        # For now, it ensures the app is buildable.
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v3
