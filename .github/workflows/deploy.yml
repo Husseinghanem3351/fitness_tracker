@@ -11,6 +11,12 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
+      - name: Setup Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'zulu'
+          java-version: '17'
+
       - name: Install Flutter
         uses: subosito/flutter-action@v2
         with:
@@ -20,6 +26,13 @@ jobs:
 
       - name: Install dependencies
         run: flutter pub get
+
+      - name: Verify Secrets
+        run: |
+          if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
+            echo "Error: KEYSTORE_BASE64 is missing from GitHub Secrets!"
+            exit 1
+          fi
 
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > zelora-release-key.jks
