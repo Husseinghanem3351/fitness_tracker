@@ -30,17 +30,22 @@ jobs:
       - name: Verify GitHub Secrets
         run: |
           if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "::error::MISSING SECRET: KEYSTORE_BASE64 is not set in GitHub Settings > Secrets > Actions"
+            echo "::error::MISSING SECRET: KEYSTORE_BASE64 is not set!"
             exit 1
           fi
           if [ -z "${{ secrets.STORE_PASSWORD }}" ]; then
-            echo "::error::MISSING SECRET: STORE_PASSWORD is not set"
+            echo "::error::MISSING SECRET: STORE_PASSWORD is not set!"
             exit 1
           fi
-          echo "Successfully verified that secrets are present."
+          echo "All required secrets are present."
 
       - name: Decode Keystore
-        run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > zelora-release-key.jks
+        run: |
+          echo "${{ secrets.KEYSTORE_BASE64 }}" | tr -d '\n' | tr -d ' ' | base64 --decode > zelora-release-key.jks
+          if [ ! -s zelora-release-key.jks ]; then
+            echo "::error::Keystore decoding failed or resulted in an empty file!"
+            exit 1
+          fi
 
       - name: Create key.properties
         run: |
