@@ -12,7 +12,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Setup Java
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v5
         with:
           distribution: 'zulu'
           java-version: '17'
@@ -27,12 +27,17 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Verify Secrets
+      - name: Verify GitHub Secrets
         run: |
           if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "Error: KEYSTORE_BASE64 is missing from GitHub Secrets!"
+            echo "::error::MISSING SECRET: KEYSTORE_BASE64 is not set in GitHub Settings > Secrets > Actions"
             exit 1
           fi
+          if [ -z "${{ secrets.STORE_PASSWORD }}" ]; then
+            echo "::error::MISSING SECRET: STORE_PASSWORD is not set"
+            exit 1
+          fi
+          echo "Successfully verified that secrets are present."
 
       - name: Decode Keystore
         run: echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > zelora-release-key.jks
