@@ -1,6 +1,14 @@
-# fitness_tracker
+# ZELORA - Intelligent Fitness Companion
 
-A new Flutter project.
+ZELORA is a professional, culturally-aware fitness and nutrition tracker. It features a clinically-backed calculation engine, interactive AI companion (Zelo), and a sophisticated Arab-localized nutrition guide.
+
+## Features
+- **Scientific Recalibration**: Uses Mifflin-St Jeor and AMDR clinical standards.
+- **Fitness Pet (Zelo)**: Dynamic, interactive dashboard companion.
+- **Smart Nutrition Guide**: 10+ options per meal with authentic Arab cuisine.
+- **Recipe-Based Creation**: Automatically calculate macros for your custom dishes.
+- **Professional Dark Mode**: High-contrast, premium midnight theme.
+- **Secure Persistence**: Fully localized and saves your preferences across restarts.
 
 ## Getting Started
 
