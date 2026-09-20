@@ -1,4 +1,4 @@
-name: ZELORA CI/CD - Build Release
+name: ZELORA CI/CD - Build & Sign
 
 on:
   push:
@@ -26,7 +26,40 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
-      - name: Build Android App Bundle (Unsigned)
+      - name: Decode Keystore (Robust)
+        run: |
+          import base64
+          import os
+          import re
+
+          encoded = os.environ.get('KEYSTORE_BASE64')
+          if not encoded:
+              print("::error::KEYSTORE_BASE64 is empty or not set!")
+              exit(1)
+          
+          # Remove any non-base64 characters
+          clean_encoded = re.sub(r'[^a-zA-Z0-9+/=]', '', encoded)
+          
+          try:
+              decoded = base64.b64decode(clean_encoded)
+              with open("zelora-release-key.jks", "wb") as f:
+                  f.write(decoded)
+              print(f"Successfully decoded keystore. Size: {len(decoded)} bytes")
+          except Exception as e:
+              print(f"::error::Keystore decoding failed: {str(e)}")
+              exit(1)
+        shell: python
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+
+      - name: Create key.properties
+        run: |
+          echo "storePassword=${{ secrets.STORE_PASSWORD }}" > android/key.properties
+          echo "keyPassword=${{ secrets.KEY_PASSWORD }}" >> android/key.properties
+          echo "keyAlias=${{ secrets.KEY_ALIAS }}" >> android/key.properties
+          echo "storeFile=../zelora-release-key.jks" >> android/key.properties
+
+      - name: Build Android App Bundle (Signed)
         run: flutter build appbundle --release --no-pub
 
       - name: Upload Artifact
