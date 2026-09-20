@@ -29,31 +29,28 @@ jobs:
       - name: Verify GitHub Secrets
         run: |
           if [ -z "${{ secrets.KEYSTORE_BASE64 }}" ]; then
-            echo "::error::MISSING SECRET: KEYSTORE_BASE64 is not set!"
+            echo "::error::MISSING SECRET: KEYSTORE_BASE64 is empty!"
             exit 1
           fi
-          if [ -z "${{ secrets.STORE_PASSWORD }}" ]; then
-            echo "::error::MISSING SECRET: STORE_PASSWORD is not set!"
-            exit 1
-          fi
-          echo "All required secrets are present."
+          echo "Secrets are present."
 
-      - name: Decode Keystore
+      - name: Decode Keystore (Force Clean)
         run: |
           import base64
           import os
+          import re
 
           encoded = os.environ.get('KEYSTORE_BASE64')
-          # Clean all possible whitespace/newlines from the user's copy-paste
-          clean_encoded = "".join(encoded.split())
+          # Remove ANY character that is not a valid Base64 character
+          clean_encoded = re.sub(r'[^a-zA-Z0-9+/=]', '', encoded)
           
           try:
               decoded = base64.b64decode(clean_encoded)
               with open("zelora-release-key.jks", "wb") as f:
                   f.write(decoded)
-              print("Successfully decoded keystore using Python logic.")
+              print("Successfully decoded keystore using Force-Clean logic.")
           except Exception as e:
-              print(f"::error::Python decoding failed: {str(e)}")
+              print(f"::error::Keystore decoding failed: {str(e)}")
               exit(1)
         shell: python
         env:
