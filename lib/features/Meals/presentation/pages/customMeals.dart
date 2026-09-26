@@ -8,6 +8,7 @@ import '../bloc/MealsCubit/MealsStates.dart';
 import '../widgets/CheckBoxTile.dart';
 import '../../domain/entities/meal.dart';
 import '../widgets/MealElement.dart';
+import '../widgets/add_new_meal_sheet.dart';
 import 'SaveCustomMeal.dart';
 
 class CustomMeal extends StatefulWidget {
@@ -29,7 +30,7 @@ class _CustomMealState extends State<CustomMeal> {
       child: Scaffold(
         backgroundColor: isDark ? const Color(0xFF0B0E11) : Colors.blueGrey[50],
         appBar: AppBar(
-          title: Text(S.of(context).customMeal, style: const TextStyle(fontWeight: FontWeight.bold)),
+          title: Text(isArabic() ? "إنشاء وصفة مخصصة" : "Recipe Builder", style: const TextStyle(fontWeight: FontWeight.bold)),
           actions: [
             if (selectedIngredients.isNotEmpty)
               Padding(
@@ -113,6 +114,17 @@ class _CustomMealState extends State<CustomMeal> {
                     },
                     separatorBuilder: (context, index) => const SizedBox(height: 8),
                     itemCount: allMeals.length,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: TextButton.icon(
+                    onPressed: () => addNewMealSheet(context),
+                    icon: const Icon(Icons.add_circle_outline, size: 18),
+                    label: Text(
+                      isArabic() ? "لم تجد المكون؟ أضف عنصراً جديداً" : "Can't find an ingredient? Add new item",
+                      style: TextStyle(color: primaryColor, fontWeight: FontWeight.bold, fontSize: 13),
+                    ),
                   ),
                 ),
               ],

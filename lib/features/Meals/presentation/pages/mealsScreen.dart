@@ -8,6 +8,7 @@ import '../../domain/entities/meal.dart';
 import '../bloc/MealsCubit/MealsCubit.dart';
 import '../bloc/MealsCubit/MealsStates.dart';
 import '../widgets/ListOfMeals.dart';
+import '../widgets/add_new_meal_sheet.dart';
 import 'customMeals.dart';
 import '../../../../features/Home/presentation/cubit/cubit.dart';
 
@@ -64,25 +65,52 @@ class MealsScreen extends StatelessWidget {
                   ),
                   Expanded(child: buildBody(context)),
                   const SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity,
-                    height: 55,
-                    child: ElevatedButton.icon(
-                      onPressed: () {
-                        navigateTo(
-                          context,
-                          const CustomMeal(),
-                        );
-                      },
-                      icon: const Icon(Icons.restaurant_menu),
-                      label: Text(S.of(context).customMeal),
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: primaryColor,
-                        foregroundColor: isDark ? Colors.black : Colors.white,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-                        elevation: 0,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: OutlinedButton.icon(
+                            onPressed: () => addNewMealSheet(context),
+                            icon: const Icon(Icons.add_circle_outline, size: 18),
+                            label: Text(
+                              isArabic() ? "صنف جديد" : "New Item",
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                            ),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: primaryColor,
+                              side: BorderSide(color: primaryColor, width: 1.5),
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: SizedBox(
+                          height: 50,
+                          child: ElevatedButton.icon(
+                            onPressed: () {
+                              navigateTo(
+                                context,
+                                const CustomMeal(),
+                              );
+                            },
+                            icon: const Icon(Icons.restaurant_menu, size: 18),
+                            label: Text(
+                              isArabic() ? "تجميع وصفة" : "Create Recipe",
+                              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
+                            ),
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: primaryColor,
+                              foregroundColor: isDark ? Colors.black : Colors.white,
+                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
+                              elevation: 0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(height: 20),
                 ],
