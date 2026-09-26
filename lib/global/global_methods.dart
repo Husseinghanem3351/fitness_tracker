@@ -38,7 +38,7 @@ Future<Unit> createDatabase() async {
   try {
     database = await openDatabase(
       'meals.db',
-      version: 4, // Bumped to 4 to fix custom meals table schema
+      version: 5, // Bumped to 5 for audited USDA/WHO food & 2024 Compendium MET values
       onConfigure: (database) {},
       onCreate: (
         database,
