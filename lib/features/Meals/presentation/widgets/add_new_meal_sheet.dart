@@ -154,7 +154,7 @@ void addNewMealSheet(BuildContext context) {
                     child: DefaultButton(
                       textBtn: S.of(context).cancel,
                       color: isDark ? Colors.white10 : Colors.grey[200],
-                      textColor: isDark ? Colors.white : Colors.black,
+                      textStyle: TextStyle(color: isDark ? Colors.white : Colors.black),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ),
@@ -171,8 +171,8 @@ void addNewMealSheet(BuildContext context) {
                             calories: double.parse(caloriesController.text),
                             name: nameController.text,
                             nameAr: nameArController.text,
-                            defaultQuantity: double.tryParse(portionWeightController.text) ?? 100,
-                            nameDefaultQuantity: portionNameController.text,
+                            defaultValue: double.tryParse(portionWeightController.text) ?? 100,
+                            defaultValueName: portionNameController.text,
                           ));
                           Navigator.pop(context);
                         }

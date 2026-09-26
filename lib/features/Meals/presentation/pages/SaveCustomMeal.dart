@@ -223,6 +223,8 @@ class _SaveCustomMealState extends State<SaveCustomMeal> {
       protein: totalProtein * gramsFactor,
       carb: totalCarbs * gramsFactor,
       fat: totalFat * gramsFactor,
+      defaultValue: 100,
+      defaultValueName: isArabic() ? '100 جرام' : '100g',
     );
   }
 }
