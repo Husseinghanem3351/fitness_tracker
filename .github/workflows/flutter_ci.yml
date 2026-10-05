@@ -36,10 +36,19 @@ jobs:
       - name: 🧪 Run Tests
         run: flutter test
 
+      - name: 🛠️ Build Android Release App Bundle (AAB)
+        run: flutter build appbundle --release
+
       - name: 🛠️ Build Android Release APK
         run: flutter build apk --release
 
-      - name: 📤 Upload Build Artifact (APK)
+      - name: 📤 Upload Release App Bundle (AAB) Artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: zelora-release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+
+      - name: 📤 Upload Release APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: zelora-release-apk
