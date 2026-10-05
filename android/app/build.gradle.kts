@@ -7,7 +7,7 @@ plugins {
 android {
     namespace = "com.example.zelora"
     compileSdk = flutter.compileSdkVersion
-    ndkVersion = "30.0.16248370"
+    ndkVersion = flutter.ndkVersion
 
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
