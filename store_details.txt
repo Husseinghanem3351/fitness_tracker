@@ -1,0 +1,39 @@
+====================================================
+           ZELORA - GOOGLE PLAY STORE DETAILS
+====================================================
+
+1. APPLICATION IDENTIFIERS:
+   - App Name: Zelora
+   - Package Name (Application ID): com.zelora.app
+   - Category: Health & Fitness
+   - App Type: Free App
+
+2. SHORT DESCRIPTION (Max 80 Characters):
+   Track daily calories, meals, workouts, water, and fitness streaks with Zelo!
+
+3. FULL DESCRIPTION:
+   Zelora is your smart, interactive daily calorie and health companion!
+
+   Key Features:
+   • Smart Calorie Budgeting: Personalized BMR & TDEE target calorie calculations based on your health goals (weight loss, muscle gain, or maintenance).
+   • Interactive Fitness Pet (Zelo): Meet Zelo! Your personal fitness mascot that reacts dynamically to your progress, levels up (+XP), and maintains daily streaks (🔥).
+   • Drag-and-Drop Quick Logger: Drag water, meals, or workouts directly onto Zelo to log them instantly!
+   • Meal & Nutrition Library: Comprehensive meal database, custom recipe builder, and macronutrient tracking (Proteins, Carbs, Fats).
+   • Exercise & Workout Tracker: Track calories burned during workouts or log custom activities.
+   • Water Intake Tracker: Interactive water tracker with customizable daily hydration goals.
+   • Local Reminders: Smart water and meal logging notifications to keep you on track.
+   • Multi-Language Support: Full support for English and Arabic.
+
+4. BUILD COMMANDS:
+   - Generate Release App Bundle (.aab):
+     flutter build appbundle --release
+
+   - Generated File Location:
+     build/app/outputs/bundle/release/app-release.aab
+
+5. GOOGLE PLAY TESTERS SETUP (Internal / Closed Testing):
+   - In Google Play Console, go to: Release > Internal testing (or Closed testing).
+   - Click the "Testers" tab.
+   - Create an Email List (e.g. "Zelora Beta Testers") and add the Gmail addresses of your testers.
+   - Copy the "Join on Android" / "Join on Web" opt-in link provided by Google Play and share it with your testers!
+====================================================
