@@ -1,4 +1,4 @@
-package com.example.zelora
+package com.zelora.app
 
 import io.flutter.embedding.android.FlutterActivity
 
