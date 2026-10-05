@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class RadioButtonList extends StatefulWidget {
-   RadioButtonList({
+  const RadioButtonList({
     super.key,
     required this.items,
     required this.onChanged,
@@ -13,18 +12,23 @@ class RadioButtonList extends StatefulWidget {
   final List<String> items;
   final List<String>? subItems;
   final void Function(String?)? onChanged;
-   int selectedOption;
+  final int selectedOption;
 
   @override
   State<RadioButtonList> createState() => _RadioButtonListState();
 }
 
 class _RadioButtonListState extends State<RadioButtonList> {
+  late int currentOption;
 
+  @override
+  void initState() {
+    super.initState();
+    currentOption = widget.selectedOption;
+  }
 
   @override
   Widget build(BuildContext context) {
-    widget.onChanged!(widget.items[widget.selectedOption]);
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       children: <Widget>[
@@ -40,20 +44,23 @@ class _RadioButtonListState extends State<RadioButtonList> {
   }
 
   Widget buttonItem(String name, int value, {String? subTitle}) =>
-      RadioListTile(
+      RadioListTile<int>(
         subtitle: subTitle != null
             ? Text(
                 subTitle,
                 style: Theme.of(context).textTheme.bodySmall,
               )
             : null,
-        title: Text(name,style: Theme.of(context).textTheme.bodyMedium,),
+        title: Text(name, style: Theme.of(context).textTheme.bodyMedium),
         value: value,
-        groupValue: widget.selectedOption,
-        onChanged: (value) {
-          setState(() {
-            widget.selectedOption = value!;
-          });
+        groupValue: currentOption,
+        onChanged: (val) {
+          if (val != null) {
+            setState(() {
+              currentOption = val;
+            });
+            widget.onChanged?.call(widget.items[val]);
+          }
         },
       );
 }

@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../global/global_methods.dart';
-import '../../../../global/global.dart';
-import '../../data/cache_helper.dart';
 import '../cubit/cubit.dart';
 import 'onboarding.dart';
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../generated/l10n.dart';
 import '../../../../global/global_methods.dart';
-import '../../../../global/widgets/default_button.dart';
 import '../../../../global/widgets/delete_dialog.dart';
 import '../../domain/entities/meal.dart';
 import '../bloc/MealsCubit/MealsCubit.dart';
